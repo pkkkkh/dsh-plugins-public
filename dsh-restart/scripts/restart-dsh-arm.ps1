@@ -20,8 +20,17 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
-$log = "C:\Users\YOURNAME\.dsh\im\logs\restart-dsh.log"
-$root = "C:\Users\YOURNAME\.dsh\im\scripts"
+# Portable: script dir is the plugin's scripts/ folder; log comes from
+# DSH_RESTART_LOG (set by the plugin) or <plugin>\logs\restart-dsh.log.
+$root = $PSScriptRoot
+$pluginRoot = Split-Path -Parent $root
+$log = $env:DSH_RESTART_LOG
+if (-not $log) { $log = Join-Path $pluginRoot "logs\restart-dsh.log" }
+$stateDir = Join-Path $pluginRoot ".state"
+New-Item -ItemType Directory -Force -Path $stateDir | Out-Null
+Set-Content -LiteralPath (Join-Path $stateDir "log-path.txt") -Value $log -Encoding ascii
+$logDir = Split-Path -Parent $log
+if (-not (Test-Path -LiteralPath $logDir)) { New-Item -ItemType Directory -Force -Path $logDir | Out-Null }
 
 function Write-Log([string]$msg) {
     # A failed log write must never stop the restart from being armed.

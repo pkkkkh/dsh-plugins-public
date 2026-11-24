@@ -484,6 +484,8 @@ export function apply(ctx, config) {
           mkdirSync(stateDir, { recursive: true });
           writeFileSync(stateDir + "/app-exe.txt", process.execPath, "utf8");
         } catch { /* 记不下来就让 start 脚本走候选探测 */ }
+        // arm 脚本与两个 cmd 半段用同一个日志文件（配置里的 logFile）。
+        try { process.env.DSH_RESTART_LOG = logFile; } catch { /* ignore */ }
 
         const result = await runProcess(powershell,
           buildArmArgs({ script, killSeconds: timings.killSeconds, startSeconds: timings.startSeconds, startScript, watchSeconds }),
