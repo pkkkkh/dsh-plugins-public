@@ -62,7 +62,7 @@ restart_dsh({
 })
 ```
 
-（本机的 `<IM 工作区>` 是 `C:/Users/YOURNAME/.dsh/im\.dsh\im`。）
+（本机的 `<IM 工作区>` 是 `C:\Users\YOURNAME\.dsh\im`。）
 
 `restart-dsh-maint-start.cmd` 做四件事：
 `pnpm install` → 验 `@dsh-ops` 还在（不在就从 C 旧 profile robocopy）→ 写问候 marker → 拉起 DSH。
@@ -100,7 +100,7 @@ restart_dsh({
 | `announceFile` | `logs/restart-announce.json` | marker 路径 |
 | `announceBotId` / `announceTargetId` | 空 | 留空 = 自动挑第一个有目标的机器人 |
 
-> 路径约定：表里的 `scripts/` 与 `logs/` 都相对于 **IM 工作区**（本机 `C:/Users/YOURNAME/.dsh/im\.dsh\im`）。
+> 路径约定：表里的 `scripts/` 与 `logs/` 都相对于 **IM 工作区**（本机 `C:\Users\YOURNAME\.dsh\im`）。
 > 换机器/换目录时改 `cordis.patch.yml` 里的 `armScript` / `maintArmScript` / `tasksScript` / `logFile` / `announceFile`，
 > 脚本里的绝对路径也要跟着改（脚本按 ASCII + 绝对路径写死，是为了避免工作目录漂移）。
 

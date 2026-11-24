@@ -7,13 +7,13 @@
       config:
         # The vetted restart scripts live in the IM workspace (ASCII only,
         # start-task-first ordering, rollback on partial registration).
-        armScript: 'C:/Users/YOURNAME/.dsh/im/.dsh/im/scripts/restart-dsh-arm.ps1'
+        armScript: 'C:/Users/YOURNAME/.dsh/im/scripts/restart-dsh-arm.ps1'
         # Strict superset used only when a caller passes start_script and/or
         # watch_seconds (maintenance runs: pnpm install inside the start half).
-        maintArmScript: 'C:/Users/YOURNAME/.dsh/im/.dsh/im/scripts/restart-dsh-arm2.ps1'
+        maintArmScript: 'C:/Users/YOURNAME/.dsh/im/scripts/restart-dsh-arm2.ps1'
         # Status / cancel helper for the DSH-Restart-* tasks.
-        tasksScript: 'C:/Users/YOURNAME/.dsh/im/.dsh/im/scripts/dsh-restart-tasks.ps1'
-        logFile: 'C:/Users/YOURNAME/.dsh/im/.dsh/im/logs/restart-dsh.log'
+        tasksScript: 'C:/Users/YOURNAME/.dsh/im/scripts/dsh-restart-tasks.ps1'
+        logFile: 'C:/Users/YOURNAME/.dsh/im/logs/restart-dsh.log'
         powershell: 'powershell.exe'
         # Default delay before DSH is killed; the start task fires 11s later.
         defaultKillSeconds: 45
@@ -23,7 +23,7 @@
         announce: true
         announceText: '咕噜～本鱼回来啦，尾巴甩甩，满血复活！'
         announceMaxAgeMinutes: 30
-        announceFile: 'C:/Users/YOURNAME/.dsh/im/.dsh/im/logs/restart-announce.json'
+        announceFile: 'C:/Users/YOURNAME/.dsh/im/logs/restart-announce.json'
         # 留空 = 自动挑第一个在线机器人 / 它的第一个投递目标；
         # 一个目标都没有时，自动把「最近聊过的会话」提升成 restart-hello 目标。
         announceBotId: ''
@@ -37,4 +37,4 @@
         watchdogPollMs: 2000
         watchdogStaleMs: 15000
         watchdogCooldownMs: 60000
-        watchdogScript: 'C:/Users/YOURNAME/.dsh/im/.dsh/im/scripts/dsh-watchdog.cjs'
+        watchdogScript: 'C:/Users/YOURNAME/.dsh/im/scripts/dsh-watchdog.cjs'

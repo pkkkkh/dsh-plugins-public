@@ -35,7 +35,7 @@ const arg = (name, fallback) => {
 const has = (name) => argv.includes(`--${name}`);
 
 const home = process.env.DSH_HOME || path.join(os.homedir(), ".dsh");
-const workspace = path.resolve(arg("workspace", "C:/Users/YOURNAME/.dsh/im/.dsh/im"));
+const workspace = path.resolve(arg("workspace", "C:/Users/YOURNAME/.dsh/im"));
 const channels = String(arg("channels", "微信,QQ,飞书,企业微信,钉钉,Telegram"))
   .split(",").map((s) => s.trim()).filter(Boolean);
 const limit = Math.max(1, Number(arg("limit", 12)) || 12);

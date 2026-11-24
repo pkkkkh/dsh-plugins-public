@@ -15,7 +15,7 @@ const DEFAULTS = {
   model: 'doubao-seedream-5-0-flash-260915',
   outputDir: 'D:\\Videos\\img',
   size: '1024x1024',
-  keyFile: 'C:\\Users\\YOURNAME\\.dsh\\im\\.dsh\\ark.key',
+  keyFile: 'C:\\Users\\YOURNAME\\.dsh\\ark.key',
 }
 
 /** Key 的优先级：配置 > 环境变量 > 本地文件。 */
@@ -125,7 +125,7 @@ export function apply(ctx, config = {}) {
             const apiKey = resolveKey(config)
             if (apiKey === '') {
               throw new Error(
-                '没有 API Key：把火山方舟的 Key 写进 C:\\Users\\YOURNAME\\.dsh\\im\\.dsh\\ark.key（一行），' +
+                '没有 API Key：把火山方舟的 Key 写进 C:\\Users\\YOURNAME\\.dsh\\ark.key（一行），' +
                   '或在 profile 的 image-toolbox 配置里填 apiKey。',
               )
             }

@@ -20,8 +20,8 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
-$log = "C:/Users/YOURNAME/.dsh/im\.dsh\im\logs\restart-dsh.log"
-$root = "C:/Users/YOURNAME/.dsh/im\.dsh\im\scripts"
+$log = "C:\Users\YOURNAME\.dsh\im\logs\restart-dsh.log"
+$root = "C:\Users\YOURNAME\.dsh\im\scripts"
 
 function Write-Log([string]$msg) {
     # A failed log write must never stop the restart from being armed.

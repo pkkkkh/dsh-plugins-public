@@ -8,11 +8,11 @@
         channels: ['微信', 'QQ', '飞书', '企业微信', '钉钉', 'Telegram']
 
         # IM 会话的工作区（决定去哪个 sessions 目录找兄弟会话）
-        imWorkspace: 'C:/Users/YOURNAME/.dsh/im/.dsh/im'
+        imWorkspace: 'C:/Users/YOURNAME/.dsh/im'
 
         # DSH 的 home：插件进程里 process.env.DSH_HOME 可能拿不到（实测读到 C 旧 home），
         # 2026-11-09 15:06 起显式写死；换 home 时记得同步改这里。
-        dshHome: 'D:/dsh-home'
+        dshHome: ''
 
         # 每个通道保留最近的几个不归档（2026-11-24 起 3 = 留最近三段）
         keep: 3
@@ -27,7 +27,7 @@
         dryRun: false
 
         # 归档动作的日志
-        logFile: 'C:/Users/YOURNAME/.dsh/im/.dsh/im/logs/im-archive.log'
+        logFile: 'C:/Users/YOURNAME/.dsh/im/logs/im-archive.log'
 
         # ── 长期上下文（自动记忆）──────────────────────────────────────
         # 2026-11-09 起：不再写「最后一段会话」的一次性快照，改成一份跨会话累积、
@@ -36,13 +36,13 @@
         #   .dsh/handoff/ 只放人工交接文档（dsh-handoff），两者不再混放。
         autoHandoff: true
         # 单次会话快照（审计 / 回看用）；长期上下文才是主入口
-        handoffDir: 'C:/Users/YOURNAME/.dsh/im/.dsh/im/.dsh/memory/auto'
+        handoffDir: 'C:/Users/YOURNAME/.dsh/im/.dsh/memory/auto'
         # 长期上下文正文：新会话开局读的就是这一份
-        handoffLatest: 'C:/Users/YOURNAME/.dsh/im/.dsh/im/.dsh/memory/LONGTERM.md'
+        handoffLatest: 'C:/Users/YOURNAME/.dsh/im/.dsh/memory/LONGTERM.md'
         # 不再写镜像（旧的 .dsh/handoff/AUTO-latest.md 已迁到 memory/AUTO-latest.legacy.md）
         handoffMirror: ''
         # 结构化事实源（JSON）；删了也能靠 scripts/seed-longterm.mjs 从 projcache 重建
-        handoffState: 'C:/Users/YOURNAME/.dsh/im/.dsh/im/.dsh/memory/longterm-state.json'
+        handoffState: 'C:/Users/YOURNAME/.dsh/im/.dsh/memory/longterm-state.json'
         # 时间线最多保留多少段会话（更早的滚出，完整历史看 auto/ 与人工交接文档）
         maxSessions: 30
         # ── 新会话开局自动交接（2026-11-09 加）──────────────────────────
@@ -52,7 +52,7 @@
         # 先关掉保证微信可用；等找到不碰 append 的注入方式再开。
         injectOnNewSession: false
         # 自动交接文档落点（这个目录里是自动生成的，别和人工 handoff 文档混）
-        injectDocDir: 'C:/Users/YOURNAME/.dsh/im/.dsh/im/.dsh/handoff/auto'
+        injectDocDir: 'C:/Users/YOURNAME/.dsh/im/.dsh/handoff/auto'
         # 注入正文的最大字符数（控制 token）
         injectMaxChars: 1800
         # 轮询兜底间隔（毫秒）：事件收不到时靠它保证「一直更新」+「新会话注入」

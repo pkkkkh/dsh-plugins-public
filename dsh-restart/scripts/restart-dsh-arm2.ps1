@@ -32,8 +32,8 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
-$log = "C:/Users/YOURNAME/.dsh/im\.dsh\im\logs\restart-dsh.log"
-$root = "C:/Users/YOURNAME/.dsh/im\.dsh\im\scripts"
+$log = "C:\Users\YOURNAME\.dsh\im\logs\restart-dsh.log"
+$root = "C:\Users\YOURNAME\.dsh\im\scripts"
 
 function Write-Log([string]$msg) {
     try {

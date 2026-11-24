@@ -13,7 +13,7 @@
 
 ## Key 的优先级
 
-`config.apiKey` → 环境变量 `ARK_API_KEY` / `ARK_APIKEY` → `keyFile`（默认 `C:\\Users\\YOURNAME\\.dsh\\im\\.dsh\\ark.key`）
+`config.apiKey` → 环境变量 `ARK_API_KEY` / `ARK_APIKEY` → `keyFile`（默认 `C:\\Users\\YOURNAME\\.dsh\\ark.key`）
 
 没配 Key 时返回明确错误，**不出图不扣费**。
 
@@ -25,7 +25,7 @@
 | `model` | `doubao-seedream-5-0-flash-260915` |
 | `outputDir` | `D:\\Videos\\img` |
 | `size` | `1024x1024` |
-| `keyFile` | `C:\\Users\\YOURNAME\\.dsh\\im\\.dsh\\ark.key` |
+| `keyFile` | `C:\\Users\\YOURNAME\\.dsh\\ark.key` |
 | `apiKey` | 空（优先于上面两者） |
 
 ## 计费

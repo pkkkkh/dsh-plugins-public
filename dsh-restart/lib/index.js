@@ -78,6 +78,8 @@ const DEFAULT_MAINT_ARM_SCRIPT = SCRIPT_ROOT + "/restart-dsh-arm2.ps1";
 const DEFAULT_TASKS_SCRIPT = SCRIPT_ROOT + "/dsh-restart-tasks.ps1";
 const DEFAULT_LOG_FILE = STATE_HOME + "/logs/restart-dsh.log";
 const DEFAULT_ANNOUNCE_FILE = STATE_HOME + "/logs/restart-announce.json";
+// 本机 DSH home 也是私有路径，公开版改为「DSH_HOME → 用户主目录/dsh-home」推导。
+const DSH_HOME_DEFAULT = pubStrip(process.env.DSH_HOME ?? "") || pubStrip(process.env.USERPROFILE ?? process.env.HOME ?? "") + "/dsh-home";
 
 // Import-time breadcrumb: proves the loader reached this module at all.
 // Without it we cannot tell "never imported" from "apply() failed".
@@ -126,7 +128,7 @@ export const Config = z.object({
   backupEnabled: z.boolean().default(true),
   backupDir: z.string().default(STATE_HOME + "/logs/restart-backups"),
   backupKeep: z.number().default(10),
-  profileDir: z.string().default("D:/dsh-home/profiles/desktop"),
+  profileDir: z.string().default(DSH_HOME_DEFAULT + "/profiles/desktop"),
   powershell: z.string().default("powershell.exe"),
   defaultKillSeconds: z.number().default(DEFAULT_KILL_SECONDS),
   announce: z.boolean().default(true),
@@ -293,7 +295,7 @@ export function apply(ctx, config) {
   const backupEnabled = config?.backupEnabled !== false;
   const backupRoot = resolveDir(config?.backupDir ?? STATE_HOME + "/logs/restart-backups", WS_ROOT + "/logs/restart-backups");
   const backupKeep = Math.max(1, Math.min(50, Number(config?.backupKeep ?? 10)));
-  const profileDir = resolveDir(config?.profileDir ?? "D:/dsh-home/profiles/desktop", (process.env.DSH_HOME || "D:/dsh-home").replace(/[\\/]+$/, "") + "/profiles/desktop");
+  const profileDir = resolveDir(config?.profileDir ?? DSH_HOME_DEFAULT + "/profiles/desktop", (process.env.DSH_HOME || DSH_HOME_DEFAULT + "").replace(/[\\/]+$/, "") + "/profiles/desktop");
 
   const backupProfile = () => {
     if (!backupEnabled) return { ok: false, reason: "已关闭" };
@@ -371,7 +373,7 @@ export function apply(ctx, config) {
       process.env.DSH_NODE || "",
       process.env.DSH_RUNTIME ? process.env.DSH_RUNTIME + "/dependencies/node/bin/node.exe" : "",
       "D:/DSH/resources/runtime/primary-runtime/dependencies/node/bin/node.exe",
-      "D:/dsh-home/dsh-runtimes/dsh-primary-runtime/dependencies/node/bin/node.exe",
+      DSH_HOME_DEFAULT + "/dsh-runtimes/dsh-primary-runtime/dependencies/node/bin/node.exe",
     ].filter(Boolean);
     for (const candidate of candidates) {
       try { if (existsSync(candidate)) return { path: candidate, electron: false }; } catch { /* next */ }
