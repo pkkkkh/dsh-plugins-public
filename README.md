@@ -25,12 +25,6 @@
     dsh plugin --profile desktop add @pkkkkh/video-toolbox
     dsh plugin --profile desktop add @pkkkkh/dsh-handoff
 
-## 未收录（上游在自己的仓库维护）
-
-- dsh-bilibili — CZX2244（本机维护版有大量改动，未公开）
-- dsh-bili-subagent — Yuuyuko-uu（本机维护版未公开）
-- dsh-deepseek-tools — 来源不明，不公开
-
 ## 许可
 
 MIT。fork 包的上游版权声明见各包 `NOTICE.md` 与 `LICENSE`。
