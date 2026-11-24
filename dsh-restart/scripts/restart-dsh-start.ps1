@@ -16,11 +16,28 @@
 # Exit codes: 0 = process up and survived the confirmation window; 1 = gave up.
 # ASCII only: PowerShell 5.1 misreads BOM-less UTF-8.
 
-$ErrorActionPreference = "Continue"
-$exe = "D:\DSH\DeepSeek Harness.exe"
+param([string]$Exe = "")
 
-if (-not (Test-Path -LiteralPath $exe)) {
-    "  START: exe not found: $exe"
+$ErrorActionPreference = "Continue"
+
+# Do not hardcode an install path: -Exe > DSH_APP_EXE > <plugin>\.state\app-exe.txt > common install dirs
+$candidates = New-Object System.Collections.ArrayList
+if ($Exe) { [void]$candidates.Add($Exe) }
+if ($env:DSH_APP_EXE) { [void]$candidates.Add($env:DSH_APP_EXE) }
+$stateFile = Join-Path (Split-Path -Parent $PSScriptRoot) ".state\app-exe.txt"
+if (Test-Path -LiteralPath $stateFile) {
+    $fromState = Get-Content -LiteralPath $stateFile -TotalCount 1
+    if ($fromState) { [void]$candidates.Add($fromState.Trim()) }
+}
+foreach ($base in @($env:ProgramFiles, ${env:ProgramFiles(x86)}, (Join-Path $env:LOCALAPPDATA "Programs"))) {
+    if ($base) { [void]$candidates.Add((Join-Path $base "DeepSeek Harness\DeepSeek Harness.exe")) }
+}
+$exe = $null
+foreach ($c in $candidates) {
+    if ($c -and (Test-Path -LiteralPath $c)) { $exe = $c; break }
+}
+if (-not $exe) {
+    "  START: DSH exe not found; pass -Exe, set DSH_APP_EXE, or write .state\app-exe.txt"
     exit 1
 }
 

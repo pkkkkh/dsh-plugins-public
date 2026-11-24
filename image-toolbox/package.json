@@ -1,6 +1,6 @@
 {
   "name": "@pkkkkh/image-toolbox",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "服务端生图：一个 image_generate 工具，直接调火山方舟（豆包 Seedream）出图并落盘。没有客户端 UI。",
   "type": "module",
   "main": "lib/index.js",

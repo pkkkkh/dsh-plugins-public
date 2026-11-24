@@ -9,11 +9,11 @@
 | --- | --- |
 | `image_generate` | `prompt`(必填)、`size`、`count`(1-4)、`model`、`saveDir` |
 
-出图后落盘到 `outputDir`（默认 `D:\\Videos\\img`），返回本地文件路径。
+出图后落盘到 `outputDir`（默认 `<用户主目录>/Videos/img`），返回本地文件路径。
 
 ## Key 的优先级
 
-`config.apiKey` → 环境变量 `ARK_API_KEY` / `ARK_APIKEY` → `keyFile`（默认 `C:\\Users\\YOURNAME\\.dsh\\ark.key`）
+`config.apiKey` → 环境变量 `ARK_API_KEY` / `ARK_APIKEY` → `keyFile`（默认 `<用户主目录>/.dsh/ark.key`）
 
 没配 Key 时返回明确错误，**不出图不扣费**。
 
@@ -23,9 +23,9 @@
 | --- | --- |
 | `baseUrl` | `https://ark.cn-beijing.volces.com/api/v3` |
 | `model` | `doubao-seedream-5-0-flash-260915` |
-| `outputDir` | `D:\\Videos\\img` |
+| `outputDir` | `<用户主目录>/Videos/img` |
 | `size` | `1024x1024` |
-| `keyFile` | `C:\\Users\\YOURNAME\\.dsh\\ark.key` |
+| `keyFile` | `<用户主目录>/.dsh/ark.key` |
 | `apiKey` | 空（优先于上面两者） |
 
 ## 计费

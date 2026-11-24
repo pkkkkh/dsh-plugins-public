@@ -1,6 +1,7 @@
 import { defineTool } from '@deepseek-ai/dsh-tools'
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
+import { homedir } from 'node:os'
 
 export const name = 'image-toolbox'
 
@@ -13,9 +14,9 @@ export const inject = ['tools']
 const DEFAULTS = {
   baseUrl: 'https://ark.cn-beijing.volces.com/api/v3',
   model: 'doubao-seedream-5-0-flash-260915',
-  outputDir: 'D:\\Videos\\img',
+  outputDir: join(homedir(), 'Videos', 'img'),
   size: '1024x1024',
-  keyFile: 'C:\\Users\\YOURNAME\\.dsh\\ark.key',
+  keyFile: join(homedir(), '.dsh', 'ark.key'),
 }
 
 /** Key 的优先级：配置 > 环境变量 > 本地文件。 */
@@ -95,7 +96,7 @@ export function apply(ctx, config = {}) {
           description: [
             '生成图片（服务端直连火山方舟 / 豆包 Seedream），出图后落盘并返回本地路径。',
             '参数：prompt（必填）、size（如 1024x1024 / 2048x2048）、count（1-4，逐张生成）、',
-            'model（可选，默认配置值）、saveDir（可选，默认 D:\\Videos\\img）。',
+            'model（可选，默认配置值）、saveDir（可选，默认 <用户主目录>/Videos/img）。',
             '没有配置 Key 时会返回明确错误；不出图时不会扣费。',
           ].join(''),
           parameters: {
@@ -103,7 +104,7 @@ export function apply(ctx, config = {}) {
             size: { type: 'string', description: '分辨率，如 1024x1024、1440x1920、2048x2048' },
             count: { type: 'number', description: '生成几张（1-4，默认 1；每张单独计费）' },
             model: { type: 'string', description: '模型 ID，默认用配置里的（doubao-seedream-*）' },
-            saveDir: { type: 'string', description: '保存目录，默认 D:\\Videos\\img' },
+            saveDir: { type: 'string', description: '保存目录，默认 <用户主目录>/Videos/img' },
           },
           output: {
             schema: {
@@ -125,7 +126,7 @@ export function apply(ctx, config = {}) {
             const apiKey = resolveKey(config)
             if (apiKey === '') {
               throw new Error(
-                '没有 API Key：把火山方舟的 Key 写进 C:\\Users\\YOURNAME\\.dsh\\ark.key（一行），' +
+                '没有 API Key：把火山方舟的 Key 写进 <用户主目录>/.dsh/ark.key（一行），' +
                   '或在 profile 的 image-toolbox 配置里填 apiKey。',
               )
             }

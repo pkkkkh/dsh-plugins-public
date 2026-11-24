@@ -173,7 +173,7 @@ EBUSY: resource busy or locked —— 是**启动脚本那一侧独占了该文�
 
 实测结果（2026-11-16 18:40 重启）：
 
-- [watchdog] started pid=3048 via D:/DSH/resources/runtime/primary-runtime/dependencies/node/bin/node.exe
+- [watchdog] started pid=3048 via <DSH 安装目录>/resources/runtime/primary-runtime/dependencies/node/bin/node.exe
 - [boot] /restart command registered
 - restart_status：当前进程 pid=10688 vs 上次排程 pid=26456 → 判定：进程已更替 ✅
 - 心跳每 5 秒刷新；重启播报正常发出

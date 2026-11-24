@@ -1,6 +1,6 @@
 {
   "name": "@pkkkkh/dsh-restart",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "Safe self-restart for DeepSeek Harness: arms a scheduled kill + start pair through the vetted restart scripts so an IM/Web session can restart the app itself.",
   "type": "module",
   "main": "lib/index.js",

@@ -24,7 +24,7 @@
 import { spawn } from "node:child_process";
 import { appendFileSync, copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, unlinkSync, writeFileSync } from "node:fs";
 import { readFile } from "node:fs/promises";
-import { dirname } from "node:path";
+import { dirname, join } from "node:path";
 import z from "@deepseek-ai/schemastery";
 import { defineTool } from "@deepseek-ai/dsh-tools";
 import { fileURLToPath } from "node:url";
@@ -372,8 +372,9 @@ export function apply(ctx, config) {
       configured,
       process.env.DSH_NODE || "",
       process.env.DSH_RUNTIME ? process.env.DSH_RUNTIME + "/dependencies/node/bin/node.exe" : "",
-      "D:/DSH/resources/runtime/primary-runtime/dependencies/node/bin/node.exe",
-      DSH_HOME_DEFAULT + "/dsh-runtimes/dsh-primary-runtime/dependencies/node/bin/node.exe",
+      // 不写死安装路径：跟着当前 Electron 的 execPath 推导，再退回 DSH_HOME 下的运行时目录
+      (() => { try { return join(dirname(process.execPath), "resources", "runtime", "primary-runtime", "dependencies", "node", "bin", "node.exe"); } catch { return ""; } })(),
+      process.env.DSH_HOME ? join(process.env.DSH_HOME, "dsh-runtimes", "dsh-primary-runtime", "dependencies", "node", "bin", "node.exe") : "",
     ].filter(Boolean);
     for (const candidate of candidates) {
       try { if (existsSync(candidate)) return { path: candidate, electron: false }; } catch { /* next */ }
@@ -476,6 +477,13 @@ export function apply(ctx, config) {
         if (!existsSync(dirname(logFile))) {
           return { ok: false, text: "重启没有排上 ❌\n原因：找不到日志目录 " + dirname(logFile) };
         }
+
+        // 公开版不写死 exe 路径：把当前 app 的可执行文件记下来，start 半段脚本会优先读它。
+        try {
+          const stateDir = PLUGIN_ROOT + "/.state";
+          mkdirSync(stateDir, { recursive: true });
+          writeFileSync(stateDir + "/app-exe.txt", process.execPath, "utf8");
+        } catch { /* 记不下来就让 start 脚本走候选探测 */ }
 
         const result = await runProcess(powershell,
           buildArmArgs({ script, killSeconds: timings.killSeconds, startSeconds: timings.startSeconds, startScript, watchSeconds }),
