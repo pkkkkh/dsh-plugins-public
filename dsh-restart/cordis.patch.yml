@@ -7,13 +7,15 @@
       config:
         # The vetted restart scripts live in the IM workspace (ASCII only,
         # start-task-first ordering, rollback on partial registration).
-        armScript: 'C:/Users/YOURNAME/.dsh/im/scripts/restart-dsh-arm.ps1'
+        # 留空 = 用插件自带的 scripts/（换机器也能跑）；要覆盖再填绝对路径。
+        armScript: ''
         # Strict superset used only when a caller passes start_script and/or
         # watch_seconds (maintenance runs: pnpm install inside the start half).
-        maintArmScript: 'C:/Users/YOURNAME/.dsh/im/scripts/restart-dsh-arm2.ps1'
+        maintArmScript: ''
         # Status / cancel helper for the DSH-Restart-* tasks.
-        tasksScript: 'C:/Users/YOURNAME/.dsh/im/scripts/dsh-restart-tasks.ps1'
-        logFile: 'C:/Users/YOURNAME/.dsh/im/logs/restart-dsh.log'
+        tasksScript: ''
+        # 留空 = DSH_HOME/logs/restart-dsh.log
+        logFile: ''
         powershell: 'powershell.exe'
         # Default delay before DSH is killed; the start task fires 11s later.
         defaultKillSeconds: 45
