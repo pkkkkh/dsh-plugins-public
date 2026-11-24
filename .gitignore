@@ -1,4 +1,5 @@
 .state/
+logs/
 node_modules/
 *.tgz
 *.bak*
