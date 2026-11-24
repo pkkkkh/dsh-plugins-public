@@ -69,32 +69,19 @@ function resolveDir(configured, fallback) {
   return fallback || value;
 }
 import { buildArmArgs, needsExtendedScript, normalizeWatchSeconds, parseTaskStatus } from "./args.js";
-// 公开版（由私有仓库导出）：路径按「环境变量 > 插件位置」推导，不写死某台机器。
-const PLUGIN_ROOT = (() => { try { return stripSlash(fileURLToPath(new URL("../", import.meta.url))); } catch { return process.cwd(); } })();
-const IM_HOME = (() => {
-  const env = stripSlash(process.env.DSH_IM_HOME ?? "");
-  if (env) return env;
-  const h = stripSlash(process.env.USERPROFILE ?? process.env.HOME ?? "");
-  return h ? h + "/.dsh/im" : PLUGIN_ROOT;
-})();
-const STATE_HOME = stripSlash(process.env.DSH_HOME ?? "") || IM_HOME;
-const SCRIPT_ROOT = (() => { try { const local = fileURLToPath(new URL("../scripts", import.meta.url)); if (existsSync(local)) return stripSlash(local); } catch {} return IM_HOME + "/scripts"; })();
+// 公开版（由私有仓库导出）：脚本用插件自带的 scripts/，日志与状态用 DSH_HOME 或插件目录下的 .state。
+const pubStrip = (s) => { let r = String(s ?? ""); while (r.length && (r.endsWith("/") || r.charCodeAt(r.length - 1) === 92)) r = r.slice(0, -1); return r; };
+const STATE_HOME = pubStrip(process.env.DSH_HOME ?? "") || PLUGIN_ROOT + "/.state";
+const SCRIPT_ROOT = (() => { try { const local = fileURLToPath(new URL("../scripts", import.meta.url)); if (existsSync(local)) return pubStrip(local); } catch {} return PLUGIN_ROOT + "/scripts"; })();
 const DEFAULT_ARM_SCRIPT = SCRIPT_ROOT + "/restart-dsh-arm.ps1";
 const DEFAULT_MAINT_ARM_SCRIPT = SCRIPT_ROOT + "/restart-dsh-arm2.ps1";
 const DEFAULT_TASKS_SCRIPT = SCRIPT_ROOT + "/dsh-restart-tasks.ps1";
 const DEFAULT_LOG_FILE = STATE_HOME + "/logs/restart-dsh.log";
 const DEFAULT_ANNOUNCE_FILE = STATE_HOME + "/logs/restart-announce.json";
-const stripSlash = (s) => { let r = String(s ?? ""); while (r.length && (r.endsWith("/") || r.charCodeAt(r.length - 1) === 92)) r = r.slice(0, -1); return r; };
 
 // Import-time breadcrumb: proves the loader reached this module at all.
 // Without it we cannot tell "never imported" from "apply() failed".
-try {
-  appendFileSync(
-    (STATE_HOME || PLUGIN_ROOT) + "/logs/restart-import.log",
-    "[" + new Date().toISOString() + "] module imported\n",
-    "utf8",
-  );
-} catch { /* never break the import */ }
+// 公开版：import 面包屑已移除（原来写死日志路径）
 import {
   DEFAULT_ANNOUNCE_TEXT,
   DEFAULT_MAX_AGE_MINUTES,
@@ -134,10 +121,10 @@ export const Config = z.object({
   tasksScript: z.string().default(DEFAULT_TASKS_SCRIPT),
   logFile: z.string().default(DEFAULT_LOG_FILE),
   // 插件自己的日志：与脚本写的 logFile 分开，避免脚本独占锁导致 EBUSY
-  pluginLogFile: z.string().default((STATE_HOME || PLUGIN_ROOT) + "/logs/restart-plugin.log"),
+  pluginLogFile: z.string().default(STATE_HOME + "/logs/restart-plugin.log"),
   // ── 重启前备份 profile 的三个关键文件（改动前留一份，最便宜的回滚点）──
   backupEnabled: z.boolean().default(true),
-  backupDir: z.string().default((STATE_HOME || PLUGIN_ROOT) + "/logs/restart-backups"),
+  backupDir: z.string().default(STATE_HOME + "/logs/restart-backups"),
   backupKeep: z.number().default(10),
   profileDir: z.string().default("D:/dsh-home/profiles/desktop"),
   powershell: z.string().default("powershell.exe"),
@@ -151,7 +138,7 @@ export const Config = z.object({
   watchdogPollMs: z.number().default(2000),
   watchdogStaleMs: z.number().default(15000),
   watchdogCooldownMs: z.number().default(60000),
-  watchdogScript: z.string().default((STATE_HOME || PLUGIN_ROOT) + "/scripts/dsh-watchdog.cjs"),
+  watchdogScript: z.string().default(SCRIPT_ROOT + "/dsh-watchdog.cjs"),
   // 显式指定 node 可执行文件；留空则自动探测（Electron 里 process.execPath 是 exe，不能直接跑 .cjs）
   watchdogNode: z.string().default(""),
   announceBotId: z.string().default(""),
@@ -268,7 +255,7 @@ export function apply(ctx, config) {
   const maintArmScript = resolveScript(config?.maintArmScript ?? DEFAULT_MAINT_ARM_SCRIPT, [PLUGIN_ROOT + "/scripts/restart-dsh-arm2.ps1", WS_ROOT + "/scripts/restart-dsh-arm2.ps1"]);
   const tasksScript = resolveScript(config?.tasksScript ?? DEFAULT_TASKS_SCRIPT, [PLUGIN_ROOT + "/scripts/dsh-restart-tasks.ps1", WS_ROOT + "/scripts/dsh-restart-tasks.ps1"]);
   const logFile = resolveFile(config?.logFile ?? DEFAULT_LOG_FILE, WS_ROOT + "/logs/restart-dsh.log");
-  const pluginLogFile = resolveFile(config?.pluginLogFile ?? (STATE_HOME || PLUGIN_ROOT) + "/logs/restart-plugin.log", WS_ROOT + "/logs/restart-plugin.log");
+  const pluginLogFile = resolveFile(config?.pluginLogFile ?? STATE_HOME + "/logs/restart-plugin.log", WS_ROOT + "/logs/restart-plugin.log");
   const powershell = String(config?.powershell ?? "powershell.exe").trim();
   const defaultKillSeconds = Number(config?.defaultKillSeconds ?? DEFAULT_KILL_SECONDS);
   const announce = config?.announce !== false;
@@ -304,7 +291,7 @@ export function apply(ctx, config) {
   // ---------- 重启前备份 + 停机时长 ----------
   const killRecordFile = stateDir + "/dsh-kill-record.json";
   const backupEnabled = config?.backupEnabled !== false;
-  const backupRoot = resolveDir(config?.backupDir ?? (STATE_HOME || PLUGIN_ROOT) + "/logs/restart-backups", WS_ROOT + "/logs/restart-backups");
+  const backupRoot = resolveDir(config?.backupDir ?? STATE_HOME + "/logs/restart-backups", WS_ROOT + "/logs/restart-backups");
   const backupKeep = Math.max(1, Math.min(50, Number(config?.backupKeep ?? 10)));
   const profileDir = resolveDir(config?.profileDir ?? "D:/dsh-home/profiles/desktop", (process.env.DSH_HOME || "D:/dsh-home").replace(/[\\/]+$/, "") + "/profiles/desktop");
 
@@ -351,7 +338,7 @@ export function apply(ctx, config) {
   const watchdogPidFile = stateDir + "/dsh-watchdog.pid";
   const watchdogLog = stateDir + "/dsh-watchdog.log";
   const watchdogEnabled = config?.watchdogEnabled === true;
-  const watchdogScript = resolveScript(config?.watchdogScript ?? (STATE_HOME || PLUGIN_ROOT) + "/scripts/dsh-watchdog.cjs", [PLUGIN_ROOT + "/scripts/dsh-watchdog.cjs", WS_ROOT + "/scripts/dsh-watchdog.cjs"]);
+  const watchdogScript = resolveScript(config?.watchdogScript ?? SCRIPT_ROOT + "/dsh-watchdog.cjs", [PLUGIN_ROOT + "/scripts/dsh-watchdog.cjs", WS_ROOT + "/scripts/dsh-watchdog.cjs"]);
   const watchdogPollMs = Math.max(500, Number(config?.watchdogPollMs ?? 2000));
   const watchdogStaleMs = Math.max(5000, Number(config?.watchdogStaleMs ?? 15000));
   const watchdogCooldownMs = Math.max(20000, Number(config?.watchdogCooldownMs ?? 60000));
@@ -399,7 +386,7 @@ export function apply(ctx, config) {
       stopFlag: stopFlagFile,
       restartFlag: restartFlagFile,
       pidFile: watchdogPidFile,
-      startScript: resolveScript((STATE_HOME || PLUGIN_ROOT) + "/scripts/restart-dsh-start.ps1", [PLUGIN_ROOT + "/scripts/restart-dsh-start.ps1", WS_ROOT + "/scripts/restart-dsh-start.ps1"]),
+      startScript: resolveScript(SCRIPT_ROOT + "/restart-dsh-start.ps1", [PLUGIN_ROOT + "/scripts/restart-dsh-start.ps1", WS_ROOT + "/scripts/restart-dsh-start.ps1"]),
       logFile: watchdogLog,
       pollMs: watchdogPollMs,
       staleMs: watchdogStaleMs,
