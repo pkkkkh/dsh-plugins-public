@@ -37,6 +37,7 @@
     "lib",
     "scripts",
     "vendor",
+    "NOTICE.md",
     "cordis.patch.yml",
     "README.md",
     "LICENSE"

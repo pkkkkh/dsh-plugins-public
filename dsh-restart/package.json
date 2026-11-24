@@ -35,6 +35,7 @@
   "files": [
     "lib",
     "scripts",
+    "NOTICE.md",
     "cordis.patch.yml",
     "README.md",
     "LICENSE"
