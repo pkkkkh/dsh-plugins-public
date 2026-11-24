@@ -5,7 +5,7 @@
 
 ## 一、原创（代码全部自己写）
 
-- [`@pkkkkh/dsh-restart`](https://www.npmjs.com/package/@pkkkkh/dsh-restart) v0.2.7 — 安全自重启 + 常驻看门狗 + 按渠道播报
+- [`@pkkkkh/dsh-restart`](https://www.npmjs.com/package/@pkkkkh/dsh-restart) v0.2.8 — 安全自重启 + 常驻看门狗 + 按渠道播报
 - [`@pkkkkh/image-toolbox`](https://www.npmjs.com/package/@pkkkkh/image-toolbox) v0.1.2 — 服务端生图（火山方舟 Seedream），一个 `image_generate` 工具
 - [`@pkkkkh/im-session-archive`](https://www.npmjs.com/package/@pkkkkh/im-session-archive) v0.2.3 — IM 会话归档 + 跨会话长期上下文（LONGTERM）
 
