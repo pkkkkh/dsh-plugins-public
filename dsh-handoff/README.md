@@ -1,3 +1,7 @@
+> **维护版说明**：本包基于上游 **zhenbang1216/dsh-handoff（MIT）** 修改（MIT，版权归上游作者）。
+> 相对上游的改动见 [NOTICE.md](NOTICE.md)。安装本维护版：
+> `dsh plugin --profile desktop add @pkkkkh/dsh-handoff`
+
 # dsh-handoff
 
 [![CI](https://github.com/zhenbang1216/dsh-handoff/actions/workflows/ci.yml/badge.svg)](https://github.com/zhenbang1216/dsh-handoff/actions/workflows/ci.yml)

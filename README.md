@@ -16,6 +16,7 @@
 ## 三、基于上游修改的维护版（fork，已署名）
 
 - [`@pkkkkh/dsh-handoff`](https://www.npmjs.com/package/@pkkkkh/dsh-handoff) v0.4.0 — 基于 zhenbang1216/dsh-handoff（MIT） 修改；改了什么见包内 `NOTICE.md`
+- [`@pkkkkh/dsh-bilibili`](https://www.npmjs.com/package/@pkkkkh/dsh-bilibili) v0.9.1 — 基于 CZX2244/dsh-bilibili（MIT） 修改；改了什么见包内 `NOTICE.md`
 
 ## 安装
 
@@ -24,6 +25,7 @@
     dsh plugin --profile desktop add @pkkkkh/im-session-archive
     dsh plugin --profile desktop add @pkkkkh/video-toolbox
     dsh plugin --profile desktop add @pkkkkh/dsh-handoff
+    dsh plugin --profile desktop add @pkkkkh/dsh-bilibili
 
 ## 许可
 
