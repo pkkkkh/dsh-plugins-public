@@ -1,0 +1,45 @@
+{
+  "name": "@pkkkkh/dsh-restart",
+  "version": "0.2.6",
+  "description": "Safe self-restart for DeepSeek Harness: arms a scheduled kill + start pair through the vetted restart scripts so an IM/Web session can restart the app itself.",
+  "type": "module",
+  "main": "lib/index.js",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pkkkkh/dsh-plugins-public.git",
+    "directory": "dsh-restart"
+  },
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "plugin",
+    "restart",
+    "dsh-plugin"
+  ],
+  "engines": {
+    "node": "^22.19.0 || >=24.0.0",
+    "dsh": ">=0.2.1-rc.2 <0.3.0-0"
+  },
+  "dsh": {
+    "manifestVersion": 1,
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.1",
+    "@deepseek-ai/dsh-tools": ">=0.1.0-rc.6 <0.3.0-0",
+    "@deepseek-ai/schemastery": "^3.18.1"
+  },
+  "files": [
+    "lib",
+    "scripts",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

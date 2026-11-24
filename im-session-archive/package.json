@@ -1,0 +1,44 @@
+{
+  "name": "@pkkkkh/im-session-archive",
+  "version": "0.2.3",
+  "description": "Archive previous IM-channel sessions and keep one continuously-updated long-term context handoff for the IM workspace.",
+  "type": "module",
+  "main": "lib/index.js",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pkkkkh/dsh-plugins-public.git",
+    "directory": "im-session-archive"
+  },
+  "keywords": [
+    "dsh-plugin",
+    "im",
+    "session",
+    "archive",
+    "handoff",
+    "deepseek-harness"
+  ],
+  "engines": {
+    "node": "^22.19.0 || >=24.0.0",
+    "dsh": ">=0.2.1-rc.2 <0.3.0-0"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.4",
+    "@deepseek-ai/dsh-tools": ">=0.2.1-rc.2"
+  },
+  "files": [
+    "lib",
+    "scripts",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

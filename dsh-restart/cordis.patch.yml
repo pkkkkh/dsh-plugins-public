@@ -1,0 +1,40 @@
+# dsh-restart — bundle patch.
+# This row is what gets inserted into the profile tree. Override any field in
+# profiles/desktop/cordis.patch.yml (later layers win).
+- insert:
+    - id: dsh-restart
+      name: 'dsh-restart'
+      config:
+        # The vetted restart scripts live in the IM workspace (ASCII only,
+        # start-task-first ordering, rollback on partial registration).
+        armScript: 'C:/Users/YOURNAME/.dsh/im/.dsh/im/scripts/restart-dsh-arm.ps1'
+        # Strict superset used only when a caller passes start_script and/or
+        # watch_seconds (maintenance runs: pnpm install inside the start half).
+        maintArmScript: 'C:/Users/YOURNAME/.dsh/im/.dsh/im/scripts/restart-dsh-arm2.ps1'
+        # Status / cancel helper for the DSH-Restart-* tasks.
+        tasksScript: 'C:/Users/YOURNAME/.dsh/im/.dsh/im/scripts/dsh-restart-tasks.ps1'
+        logFile: 'C:/Users/YOURNAME/.dsh/im/.dsh/im/logs/restart-dsh.log'
+        powershell: 'powershell.exe'
+        # Default delay before DSH is killed; the start task fires 11s later.
+        defaultKillSeconds: 45
+        # ── 「我回来啦」播报 ──────────────────────────────────────────────
+        # 计划重启时写一个 marker；下次 DSH 起来后插件读 marker，用 IM 主动投递
+        # 发一句问候，然后删 marker。非计划启动（没有 marker）不会说话。
+        announce: true
+        announceText: '咕噜～本鱼回来啦，尾巴甩甩，满血复活！'
+        announceMaxAgeMinutes: 30
+        announceFile: 'C:/Users/YOURNAME/.dsh/im/.dsh/im/logs/restart-announce.json'
+        # 留空 = 自动挑第一个在线机器人 / 它的第一个投递目标；
+        # 一个目标都没有时，自动把「最近聊过的会话」提升成 restart-hello 目标。
+        announceBotId: ''
+        announceTargetId: ''
+        announceAutoTarget: true
+        # ── 常驻看门狗（2026-11-16 加）──────────────────────────────
+        # 心跳文件每 5s 更新一次；超过 watchdogStaleMs 没更新且没有「重启中」标志，
+        # 就用 restart-dsh-start.ps1 把 DSH 拉起来（冷却期内不重复拉）。
+        # 要停：调 restart_watchdog(action:"stop")，或删 logs/dsh-stop.flag 后重启。
+        watchdogEnabled: true
+        watchdogPollMs: 2000
+        watchdogStaleMs: 15000
+        watchdogCooldownMs: 60000
+        watchdogScript: 'C:/Users/YOURNAME/.dsh/im/.dsh/im/scripts/dsh-watchdog.cjs'
