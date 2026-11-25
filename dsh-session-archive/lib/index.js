@@ -1,5 +1,5 @@
 /**
- * im-session-archive —— IM 通道会话的归档 + 长期上下文交接
+ * dsh-session-archive —— IM 通道会话的归档 + 长期上下文交接
  *
  * 归档（原有能力，逻辑未改）：
  *   新开一个 IM 通道会话时，把「同一个通道」的旧会话归档（只归档、绝不删除），
@@ -139,7 +139,7 @@ export function buildHandoff(projDir, sessionId, meta = {}) {
   const L = [];
   L.push(`# 自动交接 · ${title}`);
   L.push("");
-  L.push(`> 由 \`im-session-archive\` 于 ${new Date().toISOString()} 机械生成；内容取自会话记录，未经模型润色。`);
+  L.push(`> 由 \`dsh-session-archive\` 于 ${new Date().toISOString()} 机械生成；内容取自会话记录，未经模型润色。`);
   L.push("");
   L.push("## 基本");
   L.push("");
@@ -301,7 +301,7 @@ export function renderLongterm(state, opts = {}) {
   L.push(`# 长期上下文交接 · ${title}`);
   L.push("");
   L.push("> 这份文件是**跨会话持续更新**的长期上下文，不是某一次会话的快照。");
-  L.push(`> 由 \`im-session-archive\` 自动维护（新会话开局时生成、之后每轮刷新）；上次更新：${updated}`);
+  L.push(`> 由 \`dsh-session-archive\` 自动维护（新会话开局时生成、之后每轮刷新）；上次更新：${updated}`);
   L.push("> 「长期状态」区由模型 / 人在两个 marker 之间维护，插件原样保留；「会话时间线」由插件维护，不要手改。");
   L.push("");
   L.push("## 长期状态");
@@ -422,7 +422,7 @@ function serial(fn) {
   return MUTEX.chain;
 }
 
-export const name = "im-session-archive";
+export const name = "dsh-session-archive";
 export const inject = ["systemPrompt", "tools"];
 
 export function apply(ctx, config = {}) {
@@ -535,12 +535,12 @@ export function apply(ctx, config = {}) {
         },
       }));
     } catch (error) {
-      ctx.logger?.warn?.("[im-session-archive] longterm_search 注册失败: " + String(error?.message ?? error));
+      ctx.logger?.warn?.("[dsh-session-archive] longterm_search 注册失败: " + String(error?.message ?? error));
     }
   }
 
   if (!channels.length || !workspace) {
-    ctx.logger?.info?.("[im-session-archive] 没配置 channels / imWorkspace，空转");
+    ctx.logger?.info?.("[dsh-session-archive] 没配置 channels / imWorkspace，空转");
     return;
   }
 
@@ -564,7 +564,7 @@ export function apply(ctx, config = {}) {
   const log = (msg) => {
     const line = `[${new Date().toISOString()}] ${msg}`;
     if (logFile) appendLog(logFile, line);
-    ctx.logger?.info?.("[im-session-archive] " + msg);
+    ctx.logger?.info?.("[dsh-session-archive] " + msg);
   };
 
   log(`loaded: channels=${channels.join("/")} keep=${keep} dryRun=${dryRun} autoHandoff=${autoHandoff} maxSessions=${maxSessions} home=${home} pollMs=${pollMs}`);
@@ -734,7 +734,7 @@ export function apply(ctx, config = {}) {
       }
       const text = buildBridgeText(facts, state.notes, { maxChars: injectMaxChars })
         + (docPath ? `\n（完整交接文档：${docPath}）` : "");
-      agent.inject({ content: [{ type: "text", text }], source: { kind: "im-session-archive" } });
+      agent.inject({ content: [{ type: "text", text }], source: { kind: "dsh-session-archive" } });
       injected.add(sid);
       pendingInjects.delete(sid);
       log(`INJECT new=${sid} prev=${prev.id} chars=${text.length} doc=${docPath || "-"}`);
@@ -1025,6 +1025,6 @@ export function apply(ctx, config = {}) {
       clearInterval(pollTimer);
       clearTimeout(healBootTimer);
       clearInterval(healTimer);
-    }, "im-session-archive: pending refresh timers");
+    }, "dsh-session-archive: pending refresh timers");
   }
 }

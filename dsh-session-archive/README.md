@@ -1,4 +1,4 @@
-# im-session-archive
+# dsh-session-archive
 
 两件事：**归档 IM 通道的旧会话** + **维护跨会话的长期上下文**（`LONGTERM.md`）。
 

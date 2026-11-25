@@ -1,7 +1,7 @@
-# im-session-archive — bundle patch.
+# dsh-session-archive — bundle patch.
 - insert:
-    - id: im-session-archive
-      name: 'im-session-archive'
+    - id: dsh-session-archive
+      name: 'dsh-session-archive'
       config:
         # 只有以这些「通道名 + 分隔符」开头的会话才算 IM 会话；别的渠道一律不碰。
         # 以后接新机器人，加个词就行，代码不用改。

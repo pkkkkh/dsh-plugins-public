@@ -7,7 +7,7 @@
  *   2. 把每段会话的事实并进 longterm-state.json（保留已有的「长期状态」区）
  *   3. 渲染 LONGTERM.md，并镜像到 AUTO-latest.md
  *
- * 用法（在 apps/im-session-archive 下）：
+ * 用法（在 apps/dsh-session-archive 下）：
  *   node scripts/seed-longterm.mjs                 # 默认 12 段，直接写
  *   node scripts/seed-longterm.mjs --limit 25
  *   node scripts/seed-longterm.mjs --dry           # 只打印、不写

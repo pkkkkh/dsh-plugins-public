@@ -1,21 +1,21 @@
 {
-  "name": "@pkkkkh/im-session-archive",
-  "version": "0.2.3",
-  "description": "Archive previous IM-channel sessions and keep one continuously-updated long-term context handoff for the IM workspace.",
+  "name": "@pkkkkh/dsh-session-archive",
+  "version": "0.3.0",
+  "description": "会话归档 + 跨会话长期上下文：按通道前缀归档旧会话（只归档、不删除，无前缀旧会话按天数单独清），并维护一份每轮自动刷新的 LONGTERM.md。",
   "type": "module",
   "main": "lib/index.js",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/pkkkkh/dsh-plugins-public.git",
-    "directory": "im-session-archive"
+    "directory": "dsh-session-archive"
   },
   "keywords": [
     "dsh-plugin",
-    "im",
     "session",
     "archive",
     "handoff",
+    "context",
     "deepseek-harness"
   ],
   "engines": {

@@ -15,7 +15,7 @@
 | --- | --- | --- | --- |
 | [`@pkkkkh/dsh-restart`](https://www.npmjs.com/package/@pkkkkh/dsh-restart) | 安全的自我重启 | 计划任务排 kill/start，重启后自己回来并发一句播报 | `dsh plugin add @pkkkkh/dsh-restart` |
 | [`@pkkkkh/image-toolbox`](https://www.npmjs.com/package/@pkkkkh/image-toolbox) | 服务端生图 | 一个 image_generate，直连火山方舟 Seedream，无客户端 UI | `dsh plugin add @pkkkkh/image-toolbox` |
-| [`@pkkkkh/im-session-archive`](https://www.npmjs.com/package/@pkkkkh/im-session-archive) | IM 会话归档 + 长期上下文 | 按通道归档旧会话，维护一份跨会话 LONGTERM.md | `dsh plugin add @pkkkkh/im-session-archive` |
+| [`@pkkkkh/dsh-session-archive`](https://www.npmjs.com/package/@pkkkkh/dsh-session-archive) | 会话归档 + 长期上下文 | 按通道前缀归档旧会话，维护一份跨会话 LONGTERM.md | `dsh plugin add @pkkkkh/dsh-session-archive` |
 | [`@pkkkkh/video-toolbox`](https://www.npmjs.com/package/@pkkkkh/video-toolbox) | 视频工具箱（统一入口） | 一个 video_toolbox 覆盖 ffmpeg / 转码 / 转写 | `dsh plugin add @pkkkkh/video-toolbox` |
 | [`@pkkkkh/dsh-handoff`](https://www.npmjs.com/package/@pkkkkh/dsh-handoff) | 会话交接文档 | 自动生成交接 markdown：任务、进展、未完成、坑 | `dsh plugin add @pkkkkh/dsh-handoff` |
 | [`@pkkkkh/dsh-bilibili`](https://www.npmjs.com/package/@pkkkkh/dsh-bilibili) | B 站视频分析 | 文稿优先 + 定向抓帧，省 token 的 B 站总结 | `dsh plugin add @pkkkkh/dsh-bilibili` |
@@ -35,9 +35,9 @@ dsh plugin --profile desktop add @pkkkkh/dsh-restart
 
 ### 一、原创（代码全部自己写）
 
-- [`@pkkkkh/dsh-restart`](https://www.npmjs.com/package/@pkkkkh/dsh-restart) v0.2.9 — 安全的自我重启
+- [`@pkkkkh/dsh-restart`](https://www.npmjs.com/package/@pkkkkh/dsh-restart) v0.2.10 — 安全的自我重启
 - [`@pkkkkh/image-toolbox`](https://www.npmjs.com/package/@pkkkkh/image-toolbox) v0.1.2 — 服务端生图
-- [`@pkkkkh/im-session-archive`](https://www.npmjs.com/package/@pkkkkh/im-session-archive) v0.2.3 — IM 会话归档 + 长期上下文
+- [`@pkkkkh/dsh-session-archive`](https://www.npmjs.com/package/@pkkkkh/dsh-session-archive) v0.3.0 — 会话归档 + 长期上下文
 
 ### 二、聚合层（自写门面 + vendored 上游）
 
@@ -45,8 +45,8 @@ dsh plugin --profile desktop add @pkkkkh/dsh-restart
 
 ### 三、基于上游修改的维护版（fork，已署名）
 
-- [`@pkkkkh/dsh-handoff`](https://www.npmjs.com/package/@pkkkkh/dsh-handoff) v0.4.0 — 基于 zhenbang1216/dsh-handoff（MIT） 修改；改了什么逐条写在包内 NOTICE.md
-- [`@pkkkkh/dsh-bilibili`](https://www.npmjs.com/package/@pkkkkh/dsh-bilibili) v0.9.1 — 基于 CZX2244/dsh-bilibili（MIT） 修改；改了什么逐条写在包内 NOTICE.md
+- [`@pkkkkh/dsh-handoff`](https://www.npmjs.com/package/@pkkkkh/dsh-handoff) v0.4.1 — 基于 zhenbang1216/dsh-handoff（MIT） 修改；改了什么逐条写在包内 NOTICE.md
+- [`@pkkkkh/dsh-bilibili`](https://www.npmjs.com/package/@pkkkkh/dsh-bilibili) v0.9.2 — 基于 CZX2244/dsh-bilibili（MIT） 修改；改了什么逐条写在包内 NOTICE.md
 
 ## 怎么被发现
 

@@ -1,7 +1,7 @@
 {
   "name": "@pkkkkh/dsh-bilibili",
-  "version": "0.9.1",
-  "description": "DeepSeek Harness tool plugin: analyze Bilibili videos — transcript first, subtitle-driven keyframes, model summaries",
+  "version": "0.9.2",
+  "description": "B 站视频分析：文稿优先，按时间点定向抓帧 + 模型总结，含热门评论与弹幕峰值采样。",
   "type": "module",
   "main": "lib/index.js",
   "license": "MIT",

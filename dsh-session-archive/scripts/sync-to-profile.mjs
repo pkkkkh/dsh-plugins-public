@@ -25,10 +25,10 @@ const arg = (k, d) => {
 const profile = arg("profile", "desktop");
 const dry = argv.includes("--dry");
 const home = process.env.DSH_HOME || path.join(os.homedir(), ".dsh");
-const dst = path.join(home, "profiles", profile, "node_modules", "im-session-archive");
+const dst = path.join(home, "profiles", profile, "node_modules", "dsh-session-archive");
 
 if (!fs.existsSync(dst)) {
-  console.error(`找不到目标副本：${dst}\n先确认 profile 里装过 im-session-archive（pnpm add file:...）。`);
+  console.error(`找不到目标副本：${dst}\n先确认 profile 里装过 dsh-session-archive（pnpm add file:...）。`);
   process.exit(1);
 }
 
