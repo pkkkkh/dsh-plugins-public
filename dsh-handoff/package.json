@@ -1,6 +1,6 @@
 {
   "name": "@pkkkkh/dsh-handoff",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "会话交接文档：把当前会话整理成一份 markdown 摘要，告诉下一个会话任务是什么、已完成什么、下一步做什么、有哪些坑要避开。",
   "type": "module",
   "main": "lib/index.js",
