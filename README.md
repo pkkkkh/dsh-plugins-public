@@ -5,9 +5,51 @@
 [![downloads](https://img.shields.io/npm/dm/@pkkkkh/dsh-restart?style=flat-square)](https://www.npmjs.com/package/@pkkkkh/dsh-restart)
 [![license](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
 
-给 **DeepSeek Harness**（DSH）用的插件合集：让跑在 IM 通道（微信 / QQ / 飞书…）或桌面端的 agent，能**自己重启**、**服务端生图**、**处理视频**、**分析 B 站视频**、**跨会话记住上下文**。
+给 **DeepSeek Harness**（DSH）用的 6 个小工具：让跑在 IM 通道（微信 / QQ / 飞书…）或桌面端的 agent，能**自己重启**、**服务端生图**、**处理视频**、**分析 B 站视频**、**跨会话记住上下文**、**把工作交接清楚**。
 
 每个包都发布在 npm（`@pkkkkh/*`），一行命令就能装进 DSH。
+
+## 30 秒装上试试
+
+```bash
+dsh plugin add @pkkkkh/dsh-restart
+```
+
+装完跟它说一句「帮我重启」。它会排好一个 kill/start 的计划任务把自己重启，停机约 15 秒，
+回来后主动说一句「我回来啦」——不用你盯着。
+
+（实测两次：pid 31064 → 32820，停机 14 秒；pid 10288 → 35116，停机 16 秒。）
+
+## 解决了什么麻烦
+
+- **改完配置要重启，重启完又不知道它活没活** → `dsh-restart`：排 kill/start 任务，回来主动播报
+- **B 站长视频不想全看，又怕总结漏了关键画面** → `dsh-bilibili`：先读文稿（秒级、零下载），再按你指的时刻定向抓帧
+- **会话越开越多，老对话里的事记不住** → `dsh-session-archive`：按通道归档旧会话，维护一份跨会话的 `LONGTERM.md`
+- **想生图还得开客户端** → `image-toolbox`：一个函数直连 Seedance / Seedream，无 UI
+- **ffmpeg 那堆参数记不住** → `video-toolbox`：一个入口覆盖转码 / 抽帧 / 转写
+- **换个会话就断片，交接全靠嘴说** → `dsh-handoff`：一键生成交接文档（任务、进展、未完成、坑）
+
+## 真实跑出来的样子
+
+用 `@pkkkkh/dsh-bilibili` 扒一条 109 秒的视频，撞上两件事：
+
+1. **B 站返回的「官方字幕」是引流用的假轨**——整条只有一句「保存头像 用威信扫呀」。
+   插件判出它与标题 / 简介毫无关系，丢弃并改走 ASR，才拿到真正的文稿。
+2. **抓帧时顺带做了一次静音量测**（本地 ffmpeg，不花 token）：该片静音 0 段、全程话密 ——
+   说明信息全在音轨里，不该指望画面。
+
+这两个能力都不是设计出来的，是踩出来的。它是这么走的：
+
+```mermaid
+flowchart LR
+    A[视频链接] --> B{有可信字幕?}
+    B -- 有 --> C[读文稿 · 秒级零下载]
+    B -- 没有 / 是假轨 --> D[改走 ASR 兜底]
+    C --> E[你指定要看的时刻]
+    D --> E
+    E --> F[ffmpeg 定向抓帧 + 静音量测]
+    F --> G[带时间戳的总结]
+```
 
 ## 插件一览
 
@@ -56,7 +98,7 @@ dsh plugin --profile desktop add @pkkkkh/dsh-restart
 
 ## 反馈
 
-用着有问题、或者想要某个功能，开 issue 说一声。更新流程是「私有仓库改 → 重新导出 → 推这里」，所以这里永远是稳定快照。
+用着有问题、或者想要某个功能，开 issue 说一声。
 
 ## 许可
 
