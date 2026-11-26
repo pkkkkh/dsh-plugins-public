@@ -12,7 +12,8 @@ import { existsSync, mkdirSync } from "node:fs";
 import { dirname } from "node:path";
 
 const BS = String.fromCharCode(92); // 反斜杠：用 fromCharCode 避免源码转义歧义
-const FFMPEG_CANDIDATES = [process.env.FFMPEG_PATH, "ffmpeg", "D:/dsh-home/bin/ffmpeg.exe"].filter(Boolean);
+// 候选顺序：显式配置 → PATH 里的 ffmpeg。不写死本机路径（会随发布包泄漏目录结构）。
+const FFMPEG_CANDIDATES = [process.env.FFMPEG_PATH, "ffmpeg"].filter(Boolean);
 const FONT_CANDIDATES = [
   "C:/Windows/Fonts/msyh.ttc",
   "C:/Windows/Fonts/msyhbd.ttc",

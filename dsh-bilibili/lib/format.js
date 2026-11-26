@@ -337,6 +337,17 @@ export function formatExtraction(value) {
   const frames = value.frames ?? {};
   if (frames.enabled) {
     out.push("");
+    // 零 token 的音频结构量测：静音多 / 全片无声时，字幕与转写都先按可疑处理
+    const audioProbe = frames.audio_probe;
+    if (audioProbe && Number.isFinite(audioProbe.silent_seconds)) {
+      const span = Number(frames.duration ?? 0);
+      out.push("audio-probe: 静音 " + audioProbe.silence_events + " 段、共 " + audioProbe.silent_seconds +
+        "s（最长 " + audioProbe.longest_silence_s + "s）" +
+        (audioProbe.silent_seconds >= 30 || audioProbe.silence_events >= 8
+          ? " —— 静音多：信息多半在画面或 BGM 里，字幕/转写先按可疑处理"
+          : "") +
+        (span > 0 && audioProbe.silent_seconds >= span * 0.9 ? "；全片几乎无声，别指望 ASR" : ""));
+    }
     out.push("--- Keyframes (" + (frames.strategy ?? "") + ") ---");
     if (frames.mode) out.push("capture mode: " + frames.mode + (frames.note ? " — " + frames.note : ""));
     const list = frames.frames ?? [];

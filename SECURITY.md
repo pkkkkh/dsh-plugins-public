@@ -19,6 +19,12 @@
 - 命令与参数由本地配置或用户提供的时间点生成，不经网络下发；
 - 不写系统目录、不改其他应用的文件、不做删除类操作。
 
+### 凭据文件权限（`dsh-bilibili/lib/login.js`）
+
+`login.js:76` 用 `icacls <file> /inheritance:r /grant:r <user>:F` 把登录凭证文件的权限
+收紧到**当前用户**（去掉继承、只给本人完全控制）。这是**为了收紧权限**，不是放宽：
+凭证由使用者本地生成，写在本机，不上报、不进仓库。
+
 ### 进程清理（常态出现在 `dsh-bilibili` 的扫描里）
 
 `dsh-bilibili/lib/envcheck.js:58` 在环境自检超时时调用 `taskkill /pid <pid> /T /F`，

@@ -32,6 +32,13 @@ const TRANSCRIPT_CACHE_TTL_MS = 7 * 24 * 3600 * 1000; // 文稿小且不变，�
 // 字幕错配守卫：字幕末段 > 视频时长 * 1.5 + 60s 视为「挂错视频的字幕」
 const SUBTITLE_DURATION_FACTOR = 1.5;
 const SUBTITLE_DURATION_SLACK_SECONDS = 60;
+// 引流字幕守卫：字幕只有 1–2 段、且与标题/简介几乎无共同字 → 判为挂上来的「扫码」类字幕
+const DECOY_SUBTITLE_MAX_SEGMENTS = 2;
+const DECOY_SUBTITLE_MAX_OVERLAP = 0.2;
+// 音频结构侦察：静音判据（低于 -35dB 且持续 >= 1s），零 token
+const SILENCE_NOISE_DB = -35;
+const SILENCE_MIN_SECONDS = 1;
+const AUDIO_PROBE_TIMEOUT_MS = 120000;
 const MAX_RETRIES = 2;
 const AUDIO_CAP_BYTES = 200 * 1048576; // whisper-local 音频下载上限（DASH 纯音频远小于视频）
 const AUDIO_CONVERT_TIMEOUT_MS = 180000; // 整段音频转 16kHz WAV（长视频需要数十秒）
@@ -578,6 +585,42 @@ export function applySubtitleDurationGuard(subtitle, duration) {
   if (!subtitleDurationMismatch(subtitle.segments, duration)) return { subtitle, warning: "" };
   const warning = "字幕与视频时长严重不符（字幕到 " + formatTime(maxSubtitleEnd(subtitle.segments)) +
     "，视频 " + formatTime(duration) + "），已丢弃错配字幕";
+  return {
+    subtitle: {
+      ...subtitle,
+      source: "none",
+      text: "",
+      segments: [],
+      total_segments: 0,
+      note: warning,
+    },
+    warning,
+  };
+}
+
+/** 字幕是否与标题/简介几乎无共同字面、且分段极少 —— 典型的「引流字幕」。
+ *  B站实测（BV1XJWy66EQk，109s）：官方字幕整条只有一句「保存头像 用威信扫呀」，与内容零关系。
+ *  只判「极少段 + 几乎不共享用字」这一种形态，宁漏不误杀。 */
+export function subtitleLooksLikeDecoy(segments, meta = {}) {
+  const list = Array.isArray(segments) ? segments : [];
+  if (list.length === 0 || list.length > DECOY_SUBTITLE_MAX_SEGMENTS) return false;
+  const sub = list.map((s) => String(s?.text ?? "")).join("").replace(/\s+/gu, "");
+  if (sub.length < 6) return false;
+  const hay = String(meta.title ?? "") + String(meta.description ?? "");
+  const subChars = new Set([...sub]);
+  if (subChars.size === 0) return false;
+  const hayChars = new Set([...hay]);
+  let hit = 0;
+  for (const ch of subChars) if (hayChars.has(ch)) hit += 1;
+  return hay.length > 0 && hit / subChars.size <= DECOY_SUBTITLE_MAX_OVERLAP;
+}
+
+/** 应用引流字幕守卫：命中时丢弃字幕（改走 ASR 兜底）并返回告警。纯函数，便于单测。 */
+export function applySubtitleContentGuard(subtitle, meta) {
+  if (!subtitle || subtitle.source !== "subtitle") return { subtitle, warning: "" };
+  if (!subtitleLooksLikeDecoy(subtitle.segments, meta)) return { subtitle, warning: "" };
+  const warning = "字幕只有 " + subtitle.segments.length +
+    " 段、且与标题/简介几乎无共同内容，判为引流字幕，已丢弃并改走 ASR（无字幕轨道时）";
   return {
     subtitle: {
       ...subtitle,
@@ -1229,6 +1272,41 @@ async function runFfmpegStderrToFile(args, stderrFd, signal) {
       else reject(new Error(signal?.aborted ? "aborted" : "ffmpeg exited with code " + code));
     });
   });
+}
+
+/** 零 token 音频结构侦察：用 silencedetect 量出全片「有声音 / 静音」的比例。
+ *  用途：纯静音或纯 BGM 的视频，字幕与 ASR 转写都极度可疑（ASR 在无语音音轨上会拿模板句填空）；
+ *  有声占比也帮模型判断「信息是不是在音轨里」。best-effort，失败绝不影响抓帧。 */
+async function probeAudioStructure(videoPath, outDir, signal) {
+  const logPath = join(outDir, "audio-probe.log");
+  let fd;
+  try {
+    fd = await open(logPath, "w");
+    await runFfmpegStderrToFile([
+      "-hide_banner", "-nostats", "-i", videoPath,
+      "-map", "0:a:0?", "-af",
+      "silencedetect=noise=" + SILENCE_NOISE_DB + "dB:d=" + SILENCE_MIN_SECONDS,
+      "-f", "null", "-",
+    ], fd, requestSignal(signal, AUDIO_PROBE_TIMEOUT_MS));
+  } catch {
+    /* best-effort：没有音轨 / ffmpeg 不支持都走这里 */
+  } finally {
+    if (fd) await fd.close().catch(() => {});
+  }
+  const log = await readFile(logPath, "utf8").catch(() => "");
+  if (!log) return null;
+  const durations = [];
+  for (const m of log.matchAll(/silence_end:\s*[\d.]+\s*\|\s*silence_duration:\s*([\d.]+)/g)) {
+    const value = Number(m[1]);
+    if (Number.isFinite(value) && value > 0) durations.push(value);
+  }
+  const total = durations.reduce((sum, value) => sum + value, 0);
+  const round1 = (value) => Math.round(value * 10) / 10;
+  return {
+    silence_events: durations.length,
+    silent_seconds: round1(total),
+    longest_silence_s: durations.length > 0 ? round1(Math.max(...durations)) : 0,
+  };
 }
 
 /** Run a CLI (whisper-cli / sherpa-onnx-offline) with stdout/stderr redirected to files (no pipes): sandbox-friendly. */
@@ -1957,8 +2035,11 @@ export async function extractAll(options) {
   // 字幕时长守卫：B站偶发把别的视频的 AI 字幕挂到当前 BV 上（实测 18 秒视频先后返回过
   // 8 分半股市文稿和 4 分半钢化膜文稿）。命中后丢弃字幕、改走 ASR，避免模型把错文稿当正文。
   const guardedSubtitle = applySubtitleDurationGuard(subtitle, info.duration);
-  subtitle = guardedSubtitle.subtitle;
-  const subtitleWarning = guardedSubtitle.warning;
+  // 引流字幕守卫：B站 会把「保存头像 用威信扫呀」这种扫码字幕挂成官方字幕（实测 BV1XJWy66EQk）；
+  // 命中后同样丢弃、改走 ASR，避免模型把它当正文。
+  const guardedContent = applySubtitleContentGuard(guardedSubtitle.subtitle, info);
+  subtitle = guardedContent.subtitle;
+  const subtitleWarning = guardedSubtitle.warning || guardedContent.warning;
 
   // 环境体检：本地凭证已失效时，提前告知模型重新登录可拿到需要登录的字幕
   if (envChecks.get("credential-validity")?.status === "warn" && /require login/i.test(subtitle.note ?? "")) {
@@ -2101,6 +2182,14 @@ export async function extractAll(options) {
       if (downloadVideo && withinDurationCap && streamUrl) {
         // 先下载整段视频到本地（缓存复用），再从本地文件抓帧：快、准、可重复
         const { path: videoPath, bytes, reused } = await ensureVideo(session, streamUrl, outDir, maxDownloadMb * 1048576);
+        // 音频结构侦察（零 token）：只量有没有声音、静音多久，不碰转写。视频删除前跑。
+        try {
+          const audioProbe = await probeAudioStructure(videoPath, outDir, signal);
+          if (audioProbe) {
+            frames.audio_probe = audioProbe;
+            frames.duration = info.duration;
+          }
+        } catch { /* best-effort：失败不影响抓帧 */ }
         // 自动兜底计划（纯画面信号：场景峰值优先，均匀间隔补齐）；定向抓帧不跑全片场景检测
         const autoPlan = requestedPlan ?? selectKeyframeTimestamps(subtitle.segments, info.duration, maxFrames, []);
         const needScenePass = requestedPlan === null && detectScenes;
