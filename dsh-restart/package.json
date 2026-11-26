@@ -1,6 +1,6 @@
 {
   "name": "@pkkkkh/dsh-restart",
-  "version": "0.2.11",
+  "version": "0.2.12",
   "description": "安全自重启：通过排程一对 kill + start 计划任务（走已验证的重启脚本），让 IM / Web 会话能把 DSH 自己重启起来，重启后按渠道播报问候。",
   "type": "module",
   "main": "lib/index.js",

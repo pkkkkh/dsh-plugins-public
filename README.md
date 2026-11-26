@@ -5,7 +5,7 @@
 [![downloads](https://img.shields.io/npm/dm/@pkkkkh/dsh-restart?style=flat-square)](https://www.npmjs.com/package/@pkkkkh/dsh-restart)
 [![license](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
 
-给 **DeepSeek Harness**（DSH）用的 6 个小工具：让跑在 IM 通道（微信 / QQ / 飞书…）或桌面端的 agent，能**自己重启**、**服务端生图**、**处理视频**、**分析 B 站视频**、**跨会话记住上下文**、**把工作交接清楚**。
+给 **DeepSeek Harness**（DSH）用的 7 个小工具：让跑在 IM 通道（微信 / QQ / 飞书…）或桌面端的 agent，能**自己重启**、**服务端生图**、**处理视频**、**分析 B 站视频**、**跨会话记住上下文**、**把工作交接清楚**。
 
 每个包都发布在 npm（`@pkkkkh/*`），一行命令就能装进 DSH。
 
@@ -78,7 +78,7 @@ dsh plugin --profile desktop add @pkkkkh/dsh-restart
 
 ### 一、原创（代码全部自己写）
 
-- [`@pkkkkh/dsh-restart`](https://www.npmjs.com/package/@pkkkkh/dsh-restart) v0.2.11 — 安全的自我重启
+- [`@pkkkkh/dsh-restart`](https://www.npmjs.com/package/@pkkkkh/dsh-restart) v0.2.12 — 安全的自我重启
 - [`@pkkkkh/image-toolbox`](https://www.npmjs.com/package/@pkkkkh/image-toolbox) v0.1.2 — 服务端生图
 - [`@pkkkkh/dsh-session-archive`](https://www.npmjs.com/package/@pkkkkh/dsh-session-archive) v0.3.0 — 会话归档 + 长期上下文
 - [`@pkkkkh/dsh-session-permissions`](https://www.npmjs.com/package/@pkkkkh/dsh-session-permissions) v0.2.0
@@ -91,6 +91,16 @@ dsh plugin --profile desktop add @pkkkkh/dsh-restart
 
 - [`@pkkkkh/dsh-handoff`](https://www.npmjs.com/package/@pkkkkh/dsh-handoff) v0.4.2 — 基于 zhenbang1216/dsh-handoff（MIT） 修改；改了什么逐条写在包内 NOTICE.md
 - [`@pkkkkh/dsh-bilibili`](https://www.npmjs.com/package/@pkkkkh/dsh-bilibili) v0.9.4 — 基于 CZX2244/dsh-bilibili（MIT） 修改；改了什么逐条写在包内 NOTICE.md
+
+## 加到 DSH Discover（自定义市场）
+
+dsh 0.2.1+ 支持自定义市场索引。在 **Plugins → More（Experimental plugins）→ 打开 Custom plugin markets → Discover → Add index source**，填：
+
+```
+https://raw.githubusercontent.com/pkkkkh/dsh-plugins-public/main/market/index.json
+```
+
+就能在这个市场里直接看到并安装下面全部插件。
 
 ## 怎么被发现
 

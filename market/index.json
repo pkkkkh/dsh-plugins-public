@@ -1,0 +1,182 @@
+{
+ "format": 1,
+ "title": "pkkkkh 的 DSH 插件",
+ "description": "7 个给 DeepSeek Harness 用的小工具：自我重启 / 生图 / 视频 / B站分析 / 会话归档 / 会话权限 / 交接。",
+ "plugins": [
+  {
+   "name": "@pkkkkh/dsh-restart",
+   "title": "dsh-restart",
+   "description": "安全自重启：通过排程一对 kill + start 计划任务（走已验证的重启脚本），让 IM / Web 会话能把 DSH 自己重启起来，重启后按渠道播报问候。",
+   "repository": {
+    "url": "https://github.com/pkkkkh/dsh-plugins-public"
+   },
+   "metadata": {
+    "category": "terminal",
+    "labels": [
+     "terminal"
+    ],
+    "keywords": [
+     "dsh-plugin"
+    ]
+   },
+   "versions": [
+    {
+     "version": "0.2.12",
+     "source": {
+      "type": "npm"
+     }
+    }
+   ]
+  },
+  {
+   "name": "@pkkkkh/image-toolbox",
+   "title": "image-toolbox",
+   "description": "服务端生图：一个 image_generate 工具，直接调火山方舟（豆包 Seedream）出图并落盘。没有客户端 UI。",
+   "repository": {
+    "url": "https://github.com/pkkkkh/dsh-plugins-public"
+   },
+   "metadata": {
+    "category": "vision",
+    "labels": [
+     "vision"
+    ],
+    "keywords": [
+     "dsh-plugin"
+    ]
+   },
+   "versions": [
+    {
+     "version": "0.1.2",
+     "source": {
+      "type": "npm"
+     }
+    }
+   ]
+  },
+  {
+   "name": "@pkkkkh/dsh-session-archive",
+   "title": "dsh-session-archive",
+   "description": "会话归档 + 跨会话长期上下文：按通道前缀归档旧会话（只归档、不删除，无前缀旧会话按天数单独清），并维护一份每轮自动刷新的 LONGTERM.md。",
+   "repository": {
+    "url": "https://github.com/pkkkkh/dsh-plugins-public"
+   },
+   "metadata": {
+    "category": "memory",
+    "labels": [
+     "memory"
+    ],
+    "keywords": [
+     "dsh-plugin"
+    ]
+   },
+   "versions": [
+    {
+     "version": "0.3.0",
+     "source": {
+      "type": "npm"
+     }
+    }
+   ]
+  },
+  {
+   "name": "@pkkkkh/dsh-session-permissions",
+   "title": "dsh-session-permissions",
+   "description": "按会话下发权限：标题符合通道前缀、或 cwd 落在白名单目录里的会话，自动获得指定 sandbox 模式（默认完全访问）与审批策略，其余会话完全不受影响。",
+   "repository": {
+    "url": "https://github.com/pkkkkh/dsh-plugins-public"
+   },
+   "metadata": {
+    "category": "capabilities",
+    "labels": [
+     "capabilities"
+    ],
+    "keywords": [
+     "dsh-plugin"
+    ]
+   },
+   "versions": [
+    {
+     "version": "0.2.0",
+     "source": {
+      "type": "npm"
+     }
+    }
+   ]
+  },
+  {
+   "name": "@pkkkkh/video-toolbox",
+   "title": "video-toolbox",
+   "description": "视频工具箱聚合入口：一个 video_toolbox 工具；ffmpeg 系列（11 个）由本插件内部持有，其余转调 dsh-media-converter / dsh-audio-tools。",
+   "repository": {
+    "url": "https://github.com/pkkkkh/dsh-plugins-public"
+   },
+   "metadata": {
+    "category": "capabilities",
+    "labels": [
+     "capabilities"
+    ],
+    "keywords": [
+     "dsh-plugin"
+    ]
+   },
+   "versions": [
+    {
+     "version": "0.2.2",
+     "source": {
+      "type": "npm"
+     }
+    }
+   ]
+  },
+  {
+   "name": "@pkkkkh/dsh-handoff",
+   "title": "dsh-handoff",
+   "description": "会话交接文档：把当前会话整理成一份 markdown 摘要，告诉下一个会话任务是什么、已完成什么、下一步做什么、有哪些坑要避开。",
+   "repository": {
+    "url": "https://github.com/pkkkkh/dsh-plugins-public"
+   },
+   "metadata": {
+    "category": "memory",
+    "labels": [
+     "memory"
+    ],
+    "keywords": [
+     "dsh-plugin"
+    ]
+   },
+   "versions": [
+    {
+     "version": "0.4.2",
+     "source": {
+      "type": "npm"
+     }
+    }
+   ]
+  },
+  {
+   "name": "@pkkkkh/dsh-bilibili",
+   "title": "dsh-bilibili",
+   "description": "B 站视频分析：文稿优先，按时间点定向抓帧 + 模型总结，含热门评论与弹幕峰值采样。",
+   "repository": {
+    "url": "https://github.com/pkkkkh/dsh-plugins-public"
+   },
+   "metadata": {
+    "category": "vision",
+    "labels": [
+     "vision"
+    ],
+    "keywords": [
+     "dsh-plugin"
+    ]
+   },
+   "versions": [
+    {
+     "version": "0.9.4",
+     "source": {
+      "type": "npm"
+     }
+    }
+   ]
+  }
+ ]
+}

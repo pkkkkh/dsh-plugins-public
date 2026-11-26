@@ -30,6 +30,12 @@ import { defineTool } from "@deepseek-ai/dsh-tools";
 import { fileURLToPath } from "node:url";
 import { describeTimings, resolveTimings, DEFAULT_KILL_SECONDS } from "./timings.js";
 
+// DSH 家目录：只从环境推导，**不写死本机路径**（发布包不能带机器目录结构）
+const DSH_HOME_DIR = (() => {
+  const raw = process.env.DSH_HOME || (process.env.USERPROFILE ? process.env.USERPROFILE.replace(/[\\/]+$/, "") + "/.dsh" : "");
+  return String(raw || "").replace(/[\\/]+$/, "");
+})();
+
 // 2026-11-16：本机绝对路径的自动回退。配置里的路径不存在时（换电脑/换用户名），
 // 按「插件自身位置」推导工作区根，再拼同名相对路径——旧机行为完全不变。
 const WS_ROOT = (() => {
@@ -128,7 +134,7 @@ export const Config = z.object({
   backupEnabled: z.boolean().default(true),
   backupDir: z.string().default(STATE_HOME + "/logs/restart-backups"),
   backupKeep: z.number().default(10),
-  profileDir: z.string().default(DSH_HOME_DEFAULT + "/profiles/desktop"),
+  profileDir: z.string().default(DSH_HOME_DIR ? DSH_HOME_DIR + "/profiles/desktop" : ""),
   powershell: z.string().default("powershell.exe"),
   defaultKillSeconds: z.number().default(DEFAULT_KILL_SECONDS),
   announce: z.boolean().default(true),
@@ -295,7 +301,7 @@ export function apply(ctx, config) {
   const backupEnabled = config?.backupEnabled !== false;
   const backupRoot = resolveDir(config?.backupDir ?? STATE_HOME + "/logs/restart-backups", WS_ROOT + "/logs/restart-backups");
   const backupKeep = Math.max(1, Math.min(50, Number(config?.backupKeep ?? 10)));
-  const profileDir = resolveDir(config?.profileDir ?? DSH_HOME_DEFAULT + "/profiles/desktop", (process.env.DSH_HOME || DSH_HOME_DEFAULT + "").replace(/[\\/]+$/, "") + "/profiles/desktop");
+  const profileDir = resolveDir(config?.profileDir ?? DSH_HOME_DEFAULT + "/profiles/desktop", DSH_HOME_DIR + "/profiles/desktop");
 
   const backupProfile = () => {
     if (!backupEnabled) return { ok: false, reason: "已关闭" };
