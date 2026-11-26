@@ -19,6 +19,12 @@
 - 命令与参数由本地配置或用户提供的时间点生成，不经网络下发；
 - 不写系统目录、不改其他应用的文件、不做删除类操作。
 
+### 进程清理（常态出现在 `dsh-bilibili` 的扫描里）
+
+`dsh-bilibili/lib/envcheck.js:58` 在环境自检超时时调用 `taskkill /pid <pid> /T /F`，
+结束的是**本插件刚 spawn 出来的那个探测进程**（`ffmpeg -version` 之类可能卡住）。
+pid 来自本地 `spawn()` 的返回值，不指向任何其他进程。
+
 ## 文件写入（3 条，`dsh-session-archive`）
 
 | 位置 | 用途 | 目标 |
@@ -35,6 +41,11 @@
 - `dsh-bilibili`：访问 B 站公开接口与用户自己提供的登录凭证，用于取视频元数据/字幕/评论/弹幕。
 - `image-toolbox`：调用用户自己配置的生图服务端点。
 - 其余插件默认不联网。
+
+## 扫描器的 Info 级提示（不是问题）
+
+- 「发起网络请求 (fetch)」：`dsh-bilibili` 访问 B 站公开接口（`api.bilibili.com`）取元数据/字幕/评论，属功能本身。
+- 「硬编码 IP 地址」：命中的是 User-Agent 里的 `Chrome/120.0.0.0`，不是 IP。
 
 ## 权限插件（`dsh-session-permissions`）
 
