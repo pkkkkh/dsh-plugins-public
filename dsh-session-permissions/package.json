@@ -1,0 +1,42 @@
+{
+  "name": "@pkkkkh/dsh-session-permissions",
+  "version": "0.2.0",
+  "description": "按会话下发权限：标题符合通道前缀、或 cwd 落在白名单目录里的会话，自动获得指定 sandbox 模式（默认完全访问）与审批策略，其余会话完全不受影响。",
+  "type": "module",
+  "main": "lib/index.js",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pkkkkh/dsh-plugins-public.git",
+    "directory": "dsh-session-permissions"
+  },
+  "keywords": [
+    "dsh-plugin",
+    "permission",
+    "sandbox",
+    "session",
+    "access",
+    "deepseek-harness"
+  ],
+  "engines": {
+    "node": "^22.19.0 || >=24.0.0",
+    "dsh": ">=0.2.1-rc.2 <0.3.0-0"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "peerDependencies": {},
+  "files": [
+    "lib",
+    "scripts",
+    "NOTICE.md",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}
