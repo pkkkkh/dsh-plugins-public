@@ -102,6 +102,13 @@ https://raw.githubusercontent.com/pkkkkh/dsh-plugins-public/main/market/index.js
 
 就能在这个市场里直接看到并安装下面全部插件。
 
+## 官方 vs 社区（别误会）
+
+本仓库只通过 **npm** 分发（`dsh plugin add @pkkkkh/...`），这是 DSH 官方的安装方式。
+
+下面列的 dsh.so / dsh.works / awesome-dsh-plugin 都是**社区目录**，与 DeepSeek 官方无隶属关系：
+它们各自做安全扫描、收录与排序，我们只是把条目提上去，方便别人搜到。
+
 ## 怎么被发现
 
 - 仓库带 `dsh-plugin` topic，DSH 插件市场索引（dsh.works / dsh.market）每日扫描 GitHub 与 npm 自动收录；
