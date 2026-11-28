@@ -5,9 +5,15 @@
 [![downloads](https://img.shields.io/npm/dm/@pkkkkh/dsh-restart?style=flat-square)](https://www.npmjs.com/package/@pkkkkh/dsh-restart)
 [![license](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
 
-给 **DeepSeek Harness**（DSH）用的 7 个小工具：让跑在 IM 通道（微信 / QQ / 飞书…）或桌面端的 agent，能**自己重启**、**服务端生图**、**处理视频**、**分析 B 站视频**、**跨会话记住上下文**、**把工作交接清楚**。
+给 **DeepSeek Harness**（DSH）补 7 个它缺的能力。**一行命令装一个，不用一次装全套** —— 只想要 B 站分析，就只装 `dsh-bilibili`。
 
-每个包都发布在 npm（`@pkkkkh/*`），一行命令就能装进 DSH。
+**最常用的三个：**
+
+```bash
+dsh plugin add @pkkkkh/dsh-restart           # 让它自己重启，回来主动报平安
+dsh plugin add @pkkkkh/dsh-bilibili         # 先读 B 站文稿，再按你指的秒数抓帧
+dsh plugin add @pkkkkh/dsh-session-archive  # 跨会话记住上下文（维护 LONGTERM.md）
+```
 
 ## 30 秒装上试试
 
