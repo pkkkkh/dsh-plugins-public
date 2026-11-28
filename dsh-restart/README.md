@@ -1,3 +1,7 @@
+> **一句话**：让 agent 从 IM / Web 会话里安全地把整个 DSH 重启，回来自动说一句「我回来啦」
+> **装它**：`dsh plugin add @pkkkkh/dsh-restart`
+> **全套七个**：[pkkkkh/dsh-plugins-public](https://github.com/pkkkkh/dsh-plugins-public)
+
 # dsh-restart
 
 让 agent 能从 IM / Web 会话里**安全地把整个 DSH 重启**，并在重启成功后自动说一句「我回来啦」。

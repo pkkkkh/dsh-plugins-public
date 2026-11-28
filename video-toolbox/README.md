@@ -1,3 +1,7 @@
+> **一句话**：一个 video_toolbox 聚合入口：转码 / 抽帧 / 转写 / 字幕 / 拼接都从这一个 action 走
+> **装它**：`dsh plugin add @pkkkkh/video-toolbox`
+> **全套七个**：[pkkkkh/dsh-plugins-public](https://github.com/pkkkkh/dsh-plugins-public)
+
 # video-toolbox
 
 一个**聚合入口**：只注册一个工具 `video_toolbox`，按 `action` 把调用转给已装的三个视频插件，不重写它们的功能。

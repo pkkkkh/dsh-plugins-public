@@ -1,6 +1,6 @@
-> **维护版说明**：本包基于上游 **CZX2244/dsh-bilibili（MIT）** 修改（MIT，版权归上游作者）。
-> 相对上游的改动见 [NOTICE.md](NOTICE.md)。安装本维护版：
-> `dsh plugin --profile desktop add @pkkkkh/dsh-bilibili`
+> **一句话**：给它 B 站视频分析能力：先读文稿（秒级零下载），再按你指的秒数定向抓帧，自动丢弃引流假字幕轨
+> **装它**：`dsh plugin add @pkkkkh/dsh-bilibili`
+> **全套七个**：[pkkkkh/dsh-plugins-public](https://github.com/pkkkkh/dsh-plugins-public)
 
 # dsh-bilibili
 

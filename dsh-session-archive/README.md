@@ -1,3 +1,7 @@
+> **一句话**：归档 IM 通道的旧会话，并维护一份跨会话的长期上下文 LONGTERM.md
+> **装它**：`dsh plugin add @pkkkkh/dsh-session-archive`
+> **全套七个**：[pkkkkh/dsh-plugins-public](https://github.com/pkkkkh/dsh-plugins-public)
+
 # dsh-session-archive
 
 两件事：**归档 IM 通道的旧会话** + **维护跨会话的长期上下文**（`LONGTERM.md`）。

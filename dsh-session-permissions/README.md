@@ -1,3 +1,7 @@
+> **一句话**：给指定的 IM 会话 / 工作区开全文件权限，其它会话保持空转不放权
+> **装它**：`dsh plugin add @pkkkkh/dsh-session-permissions`
+> **全套七个**：[pkkkkh/dsh-plugins-public](https://github.com/pkkkkh/dsh-plugins-public)
+
 # dsh-session-permissions
 
 让**「IM 通道会话」**和**「指定工作区」**自动拿到完全文件权限，其它会话完全不受影响。

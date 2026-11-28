@@ -1,6 +1,6 @@
-> **维护版说明**：本包基于上游 **zhenbang1216/dsh-handoff（MIT）** 修改（MIT，版权归上游作者）。
-> 相对上游的改动见 [NOTICE.md](NOTICE.md)。安装本维护版：
-> `dsh plugin --profile desktop add @pkkkkh/dsh-handoff`
+> **一句话**：把一个会话整理成交接文档交给下一个会话：任务 / 已完成 / 下一步 / 踩过的坑
+> **装它**：`dsh plugin add @pkkkkh/dsh-handoff`
+> **全套七个**：[pkkkkh/dsh-plugins-public](https://github.com/pkkkkh/dsh-plugins-public)
 
 # dsh-handoff
 

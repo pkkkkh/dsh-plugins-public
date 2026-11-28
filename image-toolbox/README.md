@@ -1,3 +1,7 @@
+> **一句话**：一个 image_generate：直连火山方舟 Seedream 出图，没有任何客户端 UI
+> **装它**：`dsh plugin add @pkkkkh/image-toolbox`
+> **全套七个**：[pkkkkh/dsh-plugins-public](https://github.com/pkkkkh/dsh-plugins-public)
+
 # image-toolbox
 
 一个工具 `image_generate`：直连火山方舟（豆包 Seedream）出图，**没有任何客户端 UI**。
